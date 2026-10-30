@@ -23,6 +23,7 @@
     "@react-native-community/cli-platform-android": "21.0.0-alpha.1",
     "@react-native-community/cli-platform-ios": "21.0.0-alpha.1",
     "@react-native/babel-preset": "0.89.0-nightly-20261030-4afc5d5b9",
+    "@react-native/community-cli-plugin": "0.89.0-nightly-20261030-4afc5d5b9",
     "@react-native/eslint-config": "0.89.0-nightly-20261030-4afc5d5b9",
     "@react-native/jest-preset": "0.89.0-nightly-20261030-4afc5d5b9",
     "@react-native/metro-config": "0.89.0-nightly-20261030-4afc5d5b9",
