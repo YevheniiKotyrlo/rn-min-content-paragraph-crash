@@ -3,6 +3,9 @@ import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import UIKit
 
+@_silgen_name("ReproducerOverrideFeatureFlags")
+func reproducerOverrideFeatureFlags()
+
 class SceneDelegate: RCTDefaultReactNativeFactoryDelegate, UIWindowSceneDelegate {
   var window: UIWindow?
   var reactNativeFactory: RCTReactNativeFactory?
@@ -18,6 +21,7 @@ class SceneDelegate: RCTDefaultReactNativeFactoryDelegate, UIWindowSceneDelegate
 
     dependencyProvider = RCTAppDependencyProvider()
     reactNativeFactory = RCTReactNativeFactory(delegate: self)
+    reproducerOverrideFeatureFlags()
     window = UIWindow(windowScene: windowScene)
     
     #if DEBUG
