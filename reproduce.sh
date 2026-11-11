@@ -39,10 +39,11 @@ if ! (cd "${app}/ios" && pod install > "${logs}/pod-install.log" 2>&1); then
     exit 2
 fi
 
-echo "\$ xcodebuild -workspace ReproducerApp.xcworkspace -scheme ReproducerApp -configuration Release -destination generic/platform=iOS build"
+# Xcode adds the device to the profile it makes only when the destination names the device.
+echo "\$ xcodebuild -workspace ReproducerApp.xcworkspace -scheme ReproducerApp -configuration Release -destination id=${device} build"
 if ! (cd "${app}/ios" && xcodebuild -workspace ReproducerApp.xcworkspace -scheme ReproducerApp -configuration Release \
-    -destination generic/platform=iOS -derivedDataPath "${here}/derived-data" DEVELOPMENT_TEAM="${team}" \
-    CODE_SIGN_STYLE=Automatic PRODUCT_BUNDLE_IDENTIFIER="${bundle_id}" -allowProvisioningUpdates build \
+    -destination "id=${device}" -derivedDataPath "${here}/derived-data" DEVELOPMENT_TEAM="${team}" \
+    CODE_SIGN_STYLE=Automatic PRODUCT_BUNDLE_IDENTIFIER="${bundle_id}" -allowProvisioningUpdates -allowProvisioningDeviceRegistration build \
     > "${logs}/build.log" 2>&1); then
     grep -E 'error:|\*\* BUILD' "${logs}/build.log" | head -n 20
     echo "SUMMARY: the Release build failed"
