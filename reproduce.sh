@@ -17,11 +17,11 @@ mkdir -p "${logs}"
 if ! macos="$(sw_vers -productVersion)" || ! xcode="$(xcodebuild -version | tr '\n' ' ')" ||
     ! node_version="$(node --version)" || ! pod_version="$(pod --version)" ||
     ! device_line="$(xcrun devicectl list devices 2>/dev/null | grep -F "${device}")"; then
-    echo "SUMMARY: a tool the run needs is missing, or devicectl does not list ${device}"
+    echo "SUMMARY: a tool the run needs is missing, or devicectl does not list the device the run names"
     exit 2
 fi
 echo "macOS ${macos}; ${xcode}; node ${node_version}; pod ${pod_version}"
-echo "device: ${device_line}"
+echo "device: <device identifier>${device_line#*"${device}"}"
 
 echo "\$ yarn install --frozen-lockfile"
 if ! (cd "${app}" && npx --yes yarn@1 install --frozen-lockfile --non-interactive > "${logs}/yarn-install.log" 2>&1); then
@@ -40,7 +40,7 @@ if ! (cd "${app}/ios" && pod install > "${logs}/pod-install.log" 2>&1); then
 fi
 
 # Xcode adds the device to the profile it makes only when the destination names the device.
-echo "\$ xcodebuild -workspace ReproducerApp.xcworkspace -scheme ReproducerApp -configuration Release -destination id=${device} build"
+echo "\$ xcodebuild -workspace ReproducerApp.xcworkspace -scheme ReproducerApp -configuration Release -destination id=<device identifier> build"
 if ! (cd "${app}/ios" && xcodebuild -workspace ReproducerApp.xcworkspace -scheme ReproducerApp -configuration Release \
     -destination "id=${device}" -derivedDataPath "${here}/derived-data" DEVELOPMENT_TEAM="${team}" \
     CODE_SIGN_STYLE=Automatic PRODUCT_BUNDLE_IDENTIFIER="${bundle_id}" -allowProvisioningUpdates -allowProvisioningDeviceRegistration build \
