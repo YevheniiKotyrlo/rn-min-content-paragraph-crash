@@ -1,16 +1,16 @@
 # rn-min-content-paragraph-crash
 
-![Build](https://github.com/YevheniiKotyrlo/rn-min-content-paragraph-crash/workflows/Pre%20Merge%20Checks/badge.svg)
+With `enableFlexboxAutoMinSizeInStrictMode` on, a screen under `<experimental_LayoutConformance mode="strict">` that holds a Text with a View inside it crashes on the JavaScript thread under Yoga's `computeMinContentMainSize` once a later commit lays it out again.
 
-This is your new React Native Reproducer project.
+`ReproducerApp/App.tsx` renders, under `<experimental_LayoutConformance mode="strict">`, a ScrollView of pressable Texts that each hold a View of two Texts, and changes the height of a header above the list on each of 120 renders after mount. `ReproducerApp/ios/ReproducerApp/FeatureFlags.mm` turns `enableFlexboxAutoMinSizeInStrictMode` on over the Stable release level's overrides, once `RCTReactNativeFactory` has started.
 
-# Reproducer TODO list
+On a Mac with Xcode, Node and CocoaPods, and an iPhone or iPad that `xcrun devicectl list devices` lists:
 
-- [x] 1. Create a new reproducer project.
-- [ ] 2. Git clone your repository locally.
-- [ ] 3. Edit the project to reproduce the failure you're seeing.
-- [ ] 4. Push your changes, so that Github Actions can run the CI.
-- [ ] 5. Make sure the repository is public and share the link with the issue you reported.
+```sh
+DEVELOPMENT_TEAM=<your team> ./reproduce.sh <device identifier>
+```
+
+It runs `yarn install` and `pod install` in `ReproducerApp`, builds it in Release with `xcodebuild` (`BUNDLE_ID` sets the bundle identifier), installs it with `devicectl`, launches it three times for 15 seconds each and reads the crash reports the device writes. It exits 1 while a launch crashes under `computeMinContentMainSize`, 0 once the three launches run without a crash, and 2 when a step fails or a launch crashes elsewhere. The logs and crash reports are in `logs/`.
 
 # How to use this Reproducer
 
